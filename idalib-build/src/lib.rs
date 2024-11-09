@@ -64,13 +64,6 @@ pub fn idalib_install_paths() -> (PathBuf, PathBuf, PathBuf) {
         panic!("unsupported platform")
     };
 
-    if !idalib.exists() {
-        panic!(
-            "`{}` does not exist; cannot find a compatible IDA Pro installation",
-            idalib.display()
-        );
-    }
-
     (path, idalib, ida)
 }
 
@@ -119,30 +112,40 @@ pub fn configure_linkage() -> anyhow::Result<()> {
 
         #[cfg(target_os = "linux")]
         {
-            println!(
-                "cargo::rustc-link-arg=-Wl,-rpath,{},-L{},-l:libida.so",
-                install_path.display(),
-                stub_path.display(),
-            );
-            println!(
-                "cargo::rustc-link-arg=-Wl,-rpath,{},-L{},-l:libidalib.so",
-                install_path.display(),
-                stub_path.display(),
-            );
+            if install_path.exist() {
+                println!(
+                    "cargo::rustc-link-arg=-Wl,-rpath,{},-L{},-l:libida.so",
+                    install_path.display(),
+                    stub_path.display(),
+                );
+                println!(
+                    "cargo::rustc-link-arg=-Wl,-rpath,{},-L{},-l:libidalib.so",
+                    install_path.display(),
+                    stub_path.display(),
+                );
+            } else {
+                println!("cargo::rustc-link-arg=-Wl,-L{}", stub_path.display(),);
+                println!("cargo::rustc-link-arg=-Wl,-L{}", stub_path.display(),);
+            }
         }
 
         #[cfg(target_os = "macos")]
         {
-            println!(
-                "cargo::rustc-link-arg=-Wl,-rpath,{},-L{},-lida",
-                install_path.display(),
-                stub_path.display(),
-            );
-            println!(
-                "cargo::rustc-link-arg=-Wl,-rpath,{},-L{},-lidalib",
-                install_path.display(),
-                stub_path.display(),
-            );
+            if install_path.exists() {
+                println!(
+                    "cargo::rustc-link-arg=-Wl,-rpath,{},-L{},-lida",
+                    install_path.display(),
+                    stub_path.display(),
+                );
+                println!(
+                    "cargo::rustc-link-arg=-Wl,-rpath,{},-L{},-lidalib",
+                    install_path.display(),
+                    stub_path.display(),
+                );
+            } else {
+                println!("cargo::rustc-link-arg=-Wl,-L{}", stub_path.display());
+                println!("cargo::rustc-link-arg=-Wl,-L{}", stub_path.display());
+            }
         }
     }
 
