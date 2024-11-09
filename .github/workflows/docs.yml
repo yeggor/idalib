@@ -1,5 +1,8 @@
 name: Update docs
 
+permissions:
+  contents: write
+
 on:
   push:
 
@@ -35,5 +38,3 @@ jobs:
           git config push.autosetupremote true
           git commit -m 'update documentation'
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
