@@ -1,0 +1,2 @@
+cargo::rustc-link-arg=-Wl,-L/home/runner/work/idalib/idalib/../idasdk90/lib/x64_linux_gcc_64
+cargo::rustc-link-arg=-Wl,-L/home/runner/work/idalib/idalib/../idasdk90/lib/x64_linux_gcc_64
