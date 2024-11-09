@@ -1,4 +1,4 @@
-name: Rust
+name: Update docs
 
 on:
   push:
@@ -7,7 +7,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,6 +27,7 @@ jobs:
           git config push.autosetupremote true
       - name: Build
         run: |
+          git fetch --all
           IDASDKDIR=$(pwd)/../idasdk90 cargo doc --release --no-deps
           git checkout gh-pages
           mv target/doc/* . && rm -rf target
