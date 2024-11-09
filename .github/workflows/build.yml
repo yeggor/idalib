@@ -21,4 +21,4 @@ jobs:
           curl -J -L "$IDA_SDK" -o idasdk90.zip
           unzip -P $PASSWORD idasdk90.zip
       - name: Build
-        run: IDASDKDIR=../idasdk90 cargo build --verbose
+        run: IDASDKDIR=$(pwd)/../idasdk90 cargo build --verbose
