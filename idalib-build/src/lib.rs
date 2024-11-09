@@ -124,8 +124,8 @@ pub fn configure_linkage() -> anyhow::Result<()> {
                     stub_path.display(),
                 );
             } else {
-                println!("cargo::rustc-link-arg=-Wl,-L{}", stub_path.display(),);
-                println!("cargo::rustc-link-arg=-Wl,-L{}", stub_path.display(),);
+                println!("cargo::rustc-link-arg=-Wl,-L{}", stub_path.display());
+                println!("cargo::rustc-link-arg=-Wl,-L{}", stub_path.display());
             }
         }
 
