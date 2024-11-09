@@ -1,0 +1,24 @@
+name: Rust
+
+on:
+  push:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dowload IDA SDK
+        shell: bash
+        env:
+          IDA_SDK: ${{ secrets.DOWNLOAD_LINK_IDA_SDK }}
+          PASSWORD: ${{ secrets.ZIP_PASSWORD }}
+        run: |
+          cd ..
+          curl -J -L "$IDA_SDK" -o idasdk90.zip
+          unzip -P $PASSWORD idasdk90.zip
+      - name: Build
+        run: IDASDKDIR=../idasdk90 cargo build --verbose
