@@ -1,0 +1,38 @@
+name: Rust
+
+on:
+  push:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dowload IDA SDK
+        shell: bash
+        env:
+          IDA_SDK: ${{ secrets.DOWNLOAD_LINK_IDA_SDK }}
+          PASSWORD: ${{ secrets.ZIP_PASSWORD }}
+        run: |
+          cd ..
+          curl -J -L "$IDA_SDK" -o idasdk90.zip
+          unzip -P $PASSWORD idasdk90.zip
+      - name: Git settings
+        run: |
+          git config user.name "idalib"
+          git config user.email "idalib@binarly.io"
+          git config push.autosetupremote true
+      - name: Build
+        run: |
+          IDASDKDIR=$(pwd)/../idasdk90 cargo doc --release --no-deps
+          git checkout gh-pages
+          mv target/doc/* . && rm -rf target
+          git add .
+          git config push.autosetupremote true
+          git commit -m 'update documentation'
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
