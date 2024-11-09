@@ -112,7 +112,7 @@ pub fn configure_linkage() -> anyhow::Result<()> {
 
         #[cfg(target_os = "linux")]
         {
-            if install_path.exist() {
+            if install_path.exists() {
                 println!(
                     "cargo::rustc-link-arg=-Wl,-rpath,{},-L{},-l:libida.so",
                     install_path.display(),
